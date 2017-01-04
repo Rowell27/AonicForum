@@ -1,0 +1,6 @@
+[submodule "src/api/philgo-api"]
+	path = src/api/philgo-api
+	url = https://github.com/thruthesky/philgo-api
+[submodule "src/fireframe2"]
+	path = src/fireframe2
+	url = https://github.com/thruthesky/fireframe2.git

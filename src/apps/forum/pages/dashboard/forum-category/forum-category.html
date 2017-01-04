@@ -1,0 +1,21 @@
+<base-nav></base-nav>
+
+<section *ngIf=" !loginData ">
+    <h3>Not a member...</h3>
+    <div class="container-fluid">
+        <div class="container-fluid">
+        <p>You must have an account to view this content. <br /> Please 
+        <button class="btn btn-link btn-md" routerLink="/login">Log-in</button> or
+        <button class="btn btn-link btn-md" routerLink="/register">Create an Account</button>
+        if you don't have one.</p>
+    </div>
+</section>
+
+<section *ngIf=" loginData ">
+    <div class="container">
+        <h3>Categoy Single Page
+            <span class="info-right"> Logged in as: <b>{{ loginData.name }}</b> </span>
+        </h3>
+        <hr />
+    </div>
+</section>
