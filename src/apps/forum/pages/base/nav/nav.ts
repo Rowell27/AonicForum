@@ -28,7 +28,7 @@ export class BaseNav {
         this.getUserData();
 
         if ( !this.loginData ) return; 
-        
+                
         localStorage.removeItem('login_data');
         this.router.navigate( ['/login'] );
     }

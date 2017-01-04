@@ -13,33 +13,35 @@
 </section>
 
 <section *ngIf=" loginData ">
-    <h3>Create a New Thread...</h3>
+    <h3>Create a New Category...</h3>
 
     <div class="container-fluid">
         <form>
             <div class="form-group">
-                <label>Thread ID</label>
-                <input type="text" class="form-control" name="id" [(ngModel)]="categoryData.ID">
+                <label>Category ID</label>
+                <input *ngIf="!paramData" type="text" class="form-control" name="id" [(ngModel)]="category.ID">
+                <input *ngIf="paramData" disabled type="text" class="form-control" name="id" [(ngModel)]="category.ID">
             </div>
             
             <div class="form-group">
-                <label>Thread Name</label>
-                <input type="text" class="form-control" name="name" [(ngModel)]="categoryData.name">
+                <label>Category Name</label>
+                <input type="text" class="form-control" name="name" [(ngModel)]="category.name">
             </div>
 
             <div class="form-group">
-                <label>Thread Title</label>
-                <input type="text" class="form-control" name="title" [(ngModel)]="categoryData.title">
+                <label>Category Title</label>
+                <input type="text" class="form-control" name="title" [(ngModel)]="category.title">
             </div>
 
             <div class="form-group">
-                <label>Thread Description</label>
-                <input type="text" class="form-control" name="description" [(ngModel)]="categoryData.description">
+                <label>Category Description</label>
+                <input type="text" class="form-control" name="description" [(ngModel)]="category.description">
             </div>
         </form>
         
-        <button class="btn btn-primary" (click)="onClickAddCategory()">Create Thread</button>
-        <!--<button class="btn btn-primary" (click)="onClickUpdateCategory()">Edit Thread</button>-->
+        <button class="btn btn-primary" *ngIf="!paramData" (click)="onClickAddCategory()">Create Category</button>
+        <button class="btn btn-warning" *ngIf="paramData" (click)="onClickUpdateCategory()">Update Category</button>
+        <button class="btn btn-info" *ngIf="paramData" (click)="onClickBackToCategory()">Back to Category</button>
         
     </div>
 </section>

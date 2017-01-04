@@ -20,18 +20,20 @@
     <div class="container">
         <div class="card-block">
             <h4 class="card-title">
-                List of Threads 
-                <button class="btn btn-primary btn-sm btn-pos-right" routerLink="/forum-edit-category">New Thread</button>            
+                List of Categories 
+                <button class="btn btn-primary btn-sm btn-pos-right" routerLink="/forum-edit-category">
+                    New Category
+                </button>            
             </h4>
         </div>
 
         <div class="container-fluid">
             <ul class="list-group list-group-flush" *ngFor="let id of categories">
                 <li class="list-group-item">
-                    {{ data[id].title }}
+                    {{ list_category[id].title }}
                     <!--<button class="btn btn-danger btn-sm btn-pos-right">Delete Thread</button>                        -->
-                    <button class="btn btn-success btn-sm btn-pos-right" (click)="onClickViewCategory()">
-                        View Thread
+                    <button class="btn btn-success btn-sm btn-pos-right" (click)="onClickViewCategory(id)">
+                        View Category
                     </button>
                 </li>
             </ul>

@@ -29,8 +29,9 @@ export class RegisterPage {
     isLoggedIn(){
         this.loginData = JSON.parse( localStorage.getItem("login_data") );
         if ( !this.loginData ) return;
-        this.getUserData();
+        this.getUserData( () => {}, error => console.log( error ));
     }
+    
 
     onClickRegisterUser(){
         this.user
@@ -47,24 +48,24 @@ export class RegisterPage {
                         this.ref.child( this.key )
                             .set( this.userData, re => console.log("successfully pushed data", this.userData ) ); 
                              
-                        this.getUserData();
-                        
-                        this.data = {
-                            name: this.userData.name,
-                            email: this.userData.email,
-                            uid: this.key
-                        }
-                        console.log("Data to be stored on cache  ", this.data)
-                        localStorage.setItem( 'login_data', JSON.stringify( this.data ) );
-                        this.loginData = JSON.parse( localStorage.getItem( 'login_data' ) );                       
-                        console.log("Login Data: " , this.loginData.uid ); 
-                        this.router.navigate( ['/forum-home'] ); 
+                        this.getUserData( userData => {
+                                 this.data = {
+                                    name: this.userData.name,
+                                    email: this.userData.email,
+                                    uid: this.key
+                                }
+
+                                console.log("Data to be stored on cache  ", this.data)
+                                localStorage.setItem( 'login_data', JSON.stringify( this.data ) );
+                                this.loginData = JSON.parse( localStorage.getItem( 'login_data' ) );                       
+                                this.router.navigate( ['/forum-home'] ); 
+                            }, error=> alert( "Unable to get user data" + error) );
 
                         }, err=> alert('Registration failed') );
                     }, err => console.log("Registration failed. " , err) );
     }
 
-    getUserData(){
+    getUserData( successCallback, failureCallback ){
         if ( !this.key ) this.key = this.loginData.uid;
         
         console.log("This user's UID: ", this.key );
@@ -72,8 +73,9 @@ export class RegisterPage {
             .child( this.key )
             .once('value').then( snapshot => {
                 this.userData = snapshot.val(); 
+                successCallback( this.userData )
                 console.log( "User Data", this.userData );
-            }, err => console.log( "Error getUserData ", err ));
+            }, err => failureCallback( err ) );
     }
 
     onClickUpdateUser(){
@@ -81,8 +83,23 @@ export class RegisterPage {
         console.log( "This user's key to update: " , key );
         this.ref.child( key )
             .update( this.userData )
-            .then ( re => alert( "Account successfully updated" ),
-            err => console.log("Error Update. ", err) );
+            .then ( re => {
+                    alert( "Account successfully updated" );
+
+                    this.getUserData( userData => {
+                                 this.data = {
+                                    name: this.userData.name,
+                                    email: this.userData.email,
+                                    uid: this.key
+                                }
+
+                                console.log("Data to be stored on cache  ", this.data)
+                                localStorage.setItem( 'login_data', JSON.stringify( this.data ) );
+                                this.loginData = JSON.parse( localStorage.getItem( 'login_data' ) );   
+
+                                this.router.navigate( ['/forum-home'] ); 
+                            }, error=> alert( "Unable to get user data" + error) );
+                 }, err => console.log("Error Update. ", err) );
     }
 
 }   

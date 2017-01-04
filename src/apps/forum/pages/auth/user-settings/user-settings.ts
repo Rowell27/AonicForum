@@ -39,12 +39,11 @@ export class UserSettingsPage{
         user.delete()
             .then( () => {
                     alert( "Account successfully deleted" );
-                    localStorage.removeItem( 'login_data' );
-                    this.loginData = null;
-                    
+
                     this.userRef
                         .child( this.loginData.uid )
                         .remove( err => console.log( "Unable to delete user data from db. ", err ) );
+                    localStorage.removeItem( 'login_data' );
                     this.router.navigate( ['/login'] );
                 }, err => alert( "Unable to delete account" ));
     }

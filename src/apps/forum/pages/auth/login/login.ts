@@ -29,15 +29,27 @@ export class LoginPage {
         this.router.navigate( ['/forum-home'] );
     }
 
-    getUserData(){
+    // validateForm(){
+    //     this.ref
+    //         .child( this.key )
+    //         .once('value').then( snapshot => {
+    //             this.userData = snapshot.val(); 
+    //             console.log( "User Data", this.userData );
+    //         }, err => console.log( "Error getUserData ", err ));
+    // }
+
+
+    getUserData( successCallback, failureCallback ){
         if ( !this.key ) this.key = this.loginData.uid;
+        
         console.log("This user's UID: ", this.key );
         this.ref
             .child( this.key )
             .once('value').then( snapshot => {
                 this.userData = snapshot.val(); 
+                successCallback( this.userData )
                 console.log( "User Data", this.userData );
-            }, err => console.log( "Error getUserData ", err ));
+            }, err => failureCallback( err ) );
     }
 
     onClickLoginUser(){
@@ -48,22 +60,19 @@ export class LoginPage {
                 
                 this.key = authData.uid;
                 
-                this.getUserData();
-                console.log( "Data got from snapshot: ", this.userData )
-                
-                this.data = {
-                    name: this.userData.name,
-                    email: this.userData.email,
-                    uid: this.key
-                }
+                this.getUserData( userData => {
+                        this.data = {
+                        name: this.userData.name,
+                        email: this.userData.email,
+                        uid: this.key
+                    }
 
-                console.log("Data to be stored on cache  ", this.data)
-
-                localStorage.setItem( 'login_data', JSON.stringify( this.data ) );
-                this.loginData = JSON.parse( localStorage.getItem( 'login_data' ) );                       
-                console.log( "Login Data stored: " , this.loginData)
+                    console.log("Data to be stored on cache  ", this.data)
+                    localStorage.setItem( 'login_data', JSON.stringify( this.data ) );
+                    this.loginData = JSON.parse( localStorage.getItem( 'login_data' ) );                       
+                    this.router.navigate( ['/forum-home'] ); 
+                }, error=> alert( "Unable to get user data" + error) );
                 
-                this.router.navigate( ['/forum-home'] );
             }, err => console.log(err));            
     }
 }
